@@ -22,7 +22,7 @@
 
       #textArea {
         position: absolute;
-        height: 349px;
+        height: 150px;
         left: 20%;
         /* right: 25%; */
         top: calc(45% - 349px / 2 + 0.5px);
@@ -60,6 +60,15 @@
         color: #000000;
       }
 
+      #textcount {
+        font-family: "Shippori Mincho B1", serif;
+        position: absolute;
+        left: 30%;
+        /* right: 71.24%; */
+        top: calc(50% - 349px / 2 + 349px + 20px);
+        /* left: calc(50% - 843px/2 - 0.5px); */
+      }
+
       canvas {
         opacity: 0;
       }
@@ -70,6 +79,7 @@
   <body>
     <textarea name="textArea" id="textArea" cols="70" rows="5"></textarea>
     <a id="save" href="#">送信</a>
+    <p id="textcount"> 現在の文字数</p> 
 
     <!-- 読み込みたいtextarea -->
     <!-- <textarea id="textarea">sample!!</textarea> -->
@@ -164,11 +174,14 @@
           keyCount();
           timeArray();
           timeArrayB();
+          document.querySelector('#textcount').textContent = `${document.querySelector('#textArea').value.length}文字`;
+
           // console.log("aaa");
         } else {
           textAreaInput();
           keyCount();
           timeArray();
+          document.querySelector('#textcount').textContent = `${document.querySelector('#textArea').value.length}文字`;
         }
 
 
