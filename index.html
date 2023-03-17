@@ -9,7 +9,7 @@
       href="https://fonts.googleapis.com/css2?family=Roboto+Slab&family=Shippori+Mincho+B1:wght@500&display=swap"
       rel="stylesheet"
     />
-    <title>WonderfulnessOfYou</title>
+    <title>textedit</title>
 
     <!--CSS始まり-->
     <style>
@@ -79,7 +79,8 @@
   <body>
     <textarea name="textArea" id="textArea" cols="70" rows="5"></textarea>
     <a id="save" href="#">保存</a>
-<!--     <p id="textcount"> 現在の文字数</p>  -->
+    <p id="textcount"></p>
+    <!-- <p id="textcount">現在の文字数</p> -->
 
     <!-- 読み込みたいtextarea -->
     <!-- <textarea id="textarea">sample!!</textarea> -->
@@ -116,57 +117,52 @@
       // let back = false; //BACKSPACEが押されたかどうか
 
       let sabun; //新しく入力された文字数
-      let cp //新しく入力されたときのカーソルの位置
+      let cp; //新しく入力されたときのカーソルの位置
       let insertpos; //新しく入力された位置
-
 
       var date; //保存名付け用
 
+      var heightSize; //キャンバスサイズの高さ
+      var widthSize; //キャンバスサイズの幅
+
       var textArea = document.getElementById("textArea");
       // var textAreaB = document.getElementById("textAreaB");
-
 
       function setup() {
         //background(0);
         //fill(0);
         noStroke();
-        textFont('Shippori Mincho B1');
+        textFont("Shippori Mincho B1");
         // textSize(15);
       }
-
 
       var inputEventHandler = {
         compFlg: false, // IME入力中フラグ
 
-        initialize: function() {
+        initialize: function () {
           let targetElm = document.getElementById("textArea");
 
-
-          targetElm.addEventListener('keydown', function() {
+          targetElm.addEventListener("keydown", function () {
             // ブラウザによりcompositionendイベントとの発火タイミングが前後するのでsetTimeoutで少し遅らせます
-            setTimeout(function() {
+            setTimeout(function () {
               if (self.compFlg) {
                 return;
               }
-            }, 10)
+            }, 10);
           });
 
-          targetElm.addEventListener('compositionstart', function() {
+          targetElm.addEventListener("compositionstart", function () {
             self.compFlg = true;
             // 　　　　　console.log("windowWi");
           });
 
-          targetElm.addEventListener('compositionend', function() {
+          targetElm.addEventListener("compositionend", function () {
             self.compFlg = false;
             matome(false);
-
           });
-        }
-      }
+        },
+      };
       inputEventHandler.initialize();
-
-
-
 
       function matome(back) {
         if (back === true) {
@@ -174,16 +170,19 @@
           keyCount();
           timeArray();
           timeArrayB();
-          document.querySelector('#textcount').textContent = `${document.querySelector('#textArea').value.length}文字`;
+          // document.querySelector("#textcount").textContent = `${
+          //   document.querySelector("#textArea").value.length
+          // }文字`;
 
           // console.log("aaa");
         } else {
           textAreaInput();
           keyCount();
           timeArray();
-          document.querySelector('#textcount').textContent = `${document.querySelector('#textArea').value.length}文字`;
+          // document.querySelector("#textcount").textContent = `${
+          //   document.querySelector("#textArea").value.length
+          // }文字`;
         }
-
 
         Display();
         textOld = textArea.value;
@@ -191,7 +190,8 @@
         // console.log('変換確定後');
       }
 
-      function textAreaInput() { //テキストエリアの値を取得
+      function textAreaInput() {
+        //テキストエリアの値を取得
         //console.log("リスナースタート");
         textOriginal = textArea.value;
         textNew = textArea.value;
@@ -203,30 +203,31 @@
         //console.log(textOld,textNew,texttest);
       }
 
-
       function canvasSize() {
         x = xp; //入力された全ての文字数
         var y = keyCounter;
         //console.log(x, y, keyCounter * 0.03);
         createCanvas(xp * mojiSize * 1.3, y * 0.03 + 5);
         //console.log (xpD[xpD.length],timeTL[timeTL.length]);
-        //console.log(xp);
+        // console.log(xp * mojiSize * 1.3, y * 0.03 + 5);
+        widthSize = xp * mojiSize * 1.3;
+        heightSize = y * 0.03 + 5;
       }
 
-
-      function keyCount() { //確定された時の時間を取得
+      function keyCount() {
+        //確定された時の時間を取得
         keyCounter = floor(millis() * 0.2);
         timeA = append(timeA, keyCounter);
       }
 
-      function timeArray() { //追加された文字数分の時間を配列に入れる
+      function timeArray() {
+        //追加された文字数分の時間を配列に入れる
         sabun = textNew.length - textOld.length; //追加された文字数
         // console.log(textNew,textOld,-sabun);
         insertpos = cp - sabun; //追加された位置
-        for (var i = 0; i < sabun; i++) { //時間配列を追加された位置に追加された文字数分だけ追加
+        for (var i = 0; i < sabun; i++) {
+          //時間配列を追加された位置に追加された文字数分だけ追加
           timeTL.splice(insertpos, 0, keyCounter);
-
-
         }
         while (xp < textNew.length) {
           xp++;
@@ -242,8 +243,8 @@
         }
       }
 
-
-      function timeArrayB() { //Backspaceが押されたときに配列から時間を削除する
+      function timeArrayB() {
+        //Backspaceが押されたときに配列から時間を削除する
         for (var i = 0; i < -sabun; i++) {
           // console.log("append mae timeB: ",timeB);
           timeB = append(timeB, timeTL[cp + i]); //
@@ -259,7 +260,6 @@
 
           // console.log("text old revenge: ",textOld);
 
-
           //console.log(test(i));
         }
 
@@ -267,7 +267,8 @@
           test(i);
         }
 
-        function test() { //Backspaceが押された時のカーソルより後ろの文字の情報を取得
+        function test() {
+          //Backspaceが押された時のカーソルより後ろの文字の情報を取得
           for (var n = 0; n < textNew.length - cp; n++) {
             timeS = append(timeS, timeTL[cp + n]);
             textS = append(textS, textNew[cp + n]);
@@ -275,11 +276,9 @@
           }
           timeTL.splice(cp, 1);
           textD = append(textD, textOld[cp + i]);
-
         }
         console.log(timeB, timeTL.length);
       }
-
 
       function Display() {
         canvasSize();
@@ -287,13 +286,13 @@
         background(255);
         // background(200);
         deleteDisplay();
-　　　   deletetextDisplay();
+        //deletetextDisplay();
         textDisplay();
         slidetextDisplay();
       }
 
-
-      function textDisplay() { //テキストを表示
+      function textDisplay() {
+        //テキストを表示
         //fill(0);
         // textFont("Shippori Mincho B1");
         fill(0);
@@ -303,18 +302,25 @@
         }
       }
 
-      function deleteDisplay() { //消した跡を表示
+      function deleteDisplay() {
+        //消した跡を表示
         // rect(10, 10, 10, 10);
         //fill(255);
         //fill(0);
         fill(0, 60);
         for (var i = 0; i < xpD.length; i++) {
-          rect(xpD[i] * mojiSize * 1.3, timeB[i] * 0.03 - mojiSize * 1.3 + 5, mojiSize * 1.3, timeC[i] * 0.03 - timeB[i] * 0.03 + mojiSize * 1.3 - 5);
+          rect(
+            xpD[i] * mojiSize * 1.3,
+            timeB[i] * 0.03 - mojiSize * 1.3 + 5,
+            mojiSize * 1.3,
+            timeC[i] * 0.03 - timeB[i] * 0.03 + mojiSize * 1.3 - 5
+          );
         }
         // console.log(xpD.length);
       }
 
-      function deletetextDisplay() { //消された文字を表示
+      function deletetextDisplay() {
+        //消された文字を表示
         fill(255);
         for (var i = 0; i < textD.length; i++) {
           text(textD[i], xpD[i] * mojiSize * 1.3, timeB[i] * 0.03);
@@ -322,7 +328,8 @@
         }
       }
 
-      function slidetextDisplay() { //文字がスライドした痕跡
+      function slidetextDisplay() {
+        //文字がスライドした痕跡
 
         fill(0, 20);
         // fill(255, 100);
@@ -336,56 +343,72 @@
         // console.log(timeS,textS,xpS);
       }
 
-
       function keyReleased() {
-        if (keyCode == 8) { //BACKSPACEが押されたとき
+        if (keyCode == 8) {
+          //BACKSPACEが押されたとき
           if (cp > 0) {
             matome(true);
           }
         }
       }
 
-      function getdate(){
+      function getdate() {
         var now = new Date();
         var mon = now.getMonth();
         var day = now.getDate();
         var hour = now.getHours();
-       	var min = now.getMinutes();
-      	var sec = now.getSeconds();
-        date = mon+1 +'-'+day+'-'+hour+'-'+min+'-'+sec;
+        var min = now.getMinutes();
+        var sec = now.getSeconds();
+        date = mon + 1 + "-" + day + "-" + hour + "-" + min + "-" + sec;
         console.log(date);
       }
 
-      function savePng(){
-        
-        saveCanvas(date,'png');
+      function savePng() {
+        saveCanvas(date, "png");
+      }
 
+      function saveSize() {
+        console.log(widthSize,heightSize);
       }
 
       function downloadJson() {
         // テキストエリア内の文字列を取得する
         //kiroku
         kiroku = [];
-        record = {textArray: textArray,textSave: textSave, textOld: textOld, textNew: textNew, textS: textS, textD: textD, texttest: texttest, timeA: timeA, timeB: timeB, timeC: timeC, timeS: timeS, timeTL: timeTL, timeNow: timeNow, xpD: xpD, xpS: xpS, xp: xp};
+        record = {
+          textArray: textArray,
+          textSave: textSave,
+          textOld: textOld,
+          textNew: textNew,
+          textS: textS,
+          textD: textD,
+          texttest: texttest,
+          timeA: timeA,
+          timeB: timeB,
+          timeC: timeC,
+          timeS: timeS,
+          timeTL: timeTL,
+          timeNow: timeNow,
+          xpD: xpD,
+          xpS: xpS,
+          xp: xp,
+        };
         kiroku.push(record);
         stringarray = JSON.stringify(kiroku);
-        console.log(stringarray)
+        console.log(stringarray);
 
-
-
-        const text = document.getElementById('textArea').value;
+        const text = document.getElementById("textArea").value;
 
         // 取得した文字列をBlob形式に変換
-        let blobedText = new Blob([stringarray], {type: 'text/plain' });
-
+        let blobedText = new Blob([stringarray], { type: "text/plain" });
 
         // BlobをURLに変換
         let url = URL.createObjectURL(blobedText);
 
         // ダウンロード可能なa要素を作成する
-        let link = document.createElement('a');
+        let link = document.createElement("a");
         link.href = url;
-        link.download = date+'.json';
+        link.download = date + ".json";
         // 要素の追加
         document.body.appendChild(link);
 
@@ -393,37 +416,42 @@
         link.click();
 
         // 「link」は不要な要素になるので、link要素を削除
-        link.parentNode.removeChild(link)
-    }
-
-      function download() {
-          // テキストエリア内の文字列を取得する
-          const text = document.getElementById('textArea').value;
-
-          // 取得した文字列をBlob形式に変換
-          let blobedText = new Blob([text], {type: 'text/plain' });
-
-          // BlobをURLに変換
-          let url = URL.createObjectURL(blobedText);
-
-          // ダウンロード可能なa要素を作成する
-          let link = document.createElement('a');
-          link.href = url;
-          // link.download = date +'.txt';
-          link.download = date+'.txt';
-
-          // 要素の追加
-          document.body.appendChild(link);
-
-          // linkをclickすることでダウンロードが完了
-          link.click();
-
-          // 「link」は不要な要素になるので、link要素を削除
-          link.parentNode.removeChild(link)
+        link.parentNode.removeChild(link);
       }
 
-      document.getElementById("save").onclick = function(){getdate(),savePng(),download()};
-//       document.getElementById("save").onclick = function(){getdate(),savePng(),download(),downloadJson()};
+      function download() {
+        // テキストエリア内の文字列を取得する
+        const text = document.getElementById("textArea").value;
+
+        // 取得した文字列をBlob形式に変換
+        let blobedText = new Blob([text], { type: "text/plain" });
+
+        // BlobをURLに変換
+        let url = URL.createObjectURL(blobedText);
+
+        // ダウンロード可能なa要素を作成する
+        let link = document.createElement("a");
+        link.href = url;
+        // link.download = date +'.txt';
+        link.download = date + ".txt";
+
+        // 要素の追加
+        document.body.appendChild(link);
+
+        // linkをclickすることでダウンロードが完了
+        link.click();
+
+        // 「link」は不要な要素になるので、link要素を削除
+        link.parentNode.removeChild(link);
+      }
+
+      document.getElementById("save").onclick = function () {
+        getdate(), savePng(),saveSize(), download()};
+
+      // document.getElementById("save").onclick = function () {
+      //   getdate(), savePng(),saveSize(), download(), downloadJson()
+      // };
+
       // document.getElementById("save").onclick = function(){download()};
     </script>
   </body>
